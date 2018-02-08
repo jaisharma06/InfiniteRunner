@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
-public class Background : MonoBehaviour{
+public class Background : MonoBehaviour
+{
     public SpriteRenderer left_sprite;
     public SpriteRenderer right_sprite;
     public float speed = 1f;
     public int direction = -1;
+    public bool useMultiplier;
 
     public SpriteRenderer m_sprite { get { return left_sprite; } }
     public float boundX { get { return m_sprite.size.x; } }
@@ -26,11 +28,23 @@ public class Background : MonoBehaviour{
             position.x = right_sprite_transform.position.x + boundX;
             left_sprite_transform.position = position;
         }
-        else if ((right_sprite_transform.position.x < -boundX))
+        else if (!useMultiplier)
         {
-            var position = right_sprite_transform.position;
-            position.x = left_sprite_transform.position.x + boundX;
-            right_sprite_transform.position = position;
+            if ((right_sprite_transform.position.x < -boundX))
+            {
+                var position = right_sprite_transform.position;
+                position.x = left_sprite_transform.position.x + boundX;
+                right_sprite_transform.position = position;
+            }
+        }
+        else if (useMultiplier)
+        {
+            if ((right_sprite_transform.position.x < -2 * boundX))
+            {
+                var position = right_sprite_transform.position;
+                position.x = left_sprite_transform.position.x + 2 * boundX;
+                right_sprite_transform.position = position;
+            }
         }
 
         left_sprite_transform.Translate(Time.deltaTime * speed * direction, 0, 0);
